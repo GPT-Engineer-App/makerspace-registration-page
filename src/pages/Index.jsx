@@ -119,6 +119,14 @@ const Index = () => {
         particles.push(particle);
       };
 
+      const createMultipleParticles = () => {
+        for (let i = 0; i < 100; i++) {
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          createParticle(x, y);
+        }
+      };
+
       const updateParticles = () => {
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
@@ -158,6 +166,7 @@ const Index = () => {
       };
 
       canvas.addEventListener("click", handleClick);
+      createMultipleParticles(); // Create multiple particles by default
       animate();
 
       return () => {
