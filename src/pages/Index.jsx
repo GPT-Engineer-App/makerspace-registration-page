@@ -1,5 +1,5 @@
 import { Container, VStack, Heading, Text, Box, Button, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter, List, ListItem, ListIcon, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useDisclosure } from "@chakra-ui/react";
 
@@ -10,6 +10,7 @@ const Index = () => {
     email: "",
     address: "",
   });
+  const [showFireworks, setShowFireworks] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -23,6 +24,8 @@ const Index = () => {
 
   const handleSubmit = () => {
     onOpen();
+    setShowFireworks(true);
+    setTimeout(() => setShowFireworks(false), 5000); // Fireworks for 5 seconds
   };
 
   const membershipOptions = [
@@ -70,8 +73,78 @@ const Index = () => {
     setIsXNext(!isXNext);
   };
 
+  const FireworksCanvas = () => {
+    const canvasRef = useRef(null);
+
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      const particles = [];
+
+      const createParticle = (x, y) => {
+        const particle = {
+          x,
+          y,
+          size: Math.random() * 5 + 1,
+          speedX: Math.random() * 3 - 1.5,
+          speedY: Math.random() * 3 - 1.5,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        };
+        particles.push(particle);
+      };
+
+      const updateParticles = () => {
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.size *= 0.95;
+          if (p.size < 0.5) {
+            particles.splice(i, 1);
+            i--;
+          }
+        }
+      };
+
+      const drawParticles = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const p of particles) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+      };
+
+      const animate = () => {
+        updateParticles();
+        drawParticles();
+        requestAnimationFrame(animate);
+      };
+
+      const handleClick = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        for (let i = 0; i < 100; i++) {
+          createParticle(x, y);
+        }
+      };
+
+      canvas.addEventListener("click", handleClick);
+      animate();
+
+      return () => {
+        canvas.removeEventListener("click", handleClick);
+      };
+    }, []);
+
+    return <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} style={{ position: "fixed", top: 0, left: 0, pointerEvents: "none" }} />;
+  };
+
   return (
     <Container centerContent maxW="container.lg" py={10}>
+      {showFireworks && <FireworksCanvas />}
       <VStack spacing={8} width="100%">
         <Heading as="h1" size="2xl" textAlign="center">
           Join Stockholm Makerspace
