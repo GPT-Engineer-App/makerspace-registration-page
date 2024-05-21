@@ -183,6 +183,9 @@ const Index = () => {
     <Container centerContent maxW="container.lg" py={10}>
       {showFireworks && <FireworksCanvas />}
       <VStack spacing={8} width="100%">
+        <Heading as="h1" size="4xl" textAlign="center" color="red.500">
+          C++ issues are the root of all problems.
+        </Heading>
         <Heading as="h1" size="2xl" textAlign="center">
           Join Stockholm Makerspace
         </Heading>
