@@ -1,4 +1,4 @@
-import { Container, VStack, Heading, Text, Box, Button, RadioGroup, Radio, Stack, Input, FormControl, FormLabel } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Box, Button, RadioGroup, Radio, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 import { useState } from "react";
 
 const Index = () => {
@@ -37,26 +37,38 @@ const Index = () => {
             Membership Options
           </Heading>
           <RadioGroup onChange={setMembershipType} value={membershipType}>
-            <Stack direction="column" spacing={4}>
-              <Radio value="yearly">
-                <Box>
-                  <Text fontWeight="bold">Yearly Membership</Text>
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
+              <Card>
+                <CardHeader>
+                  <Radio value="yearly">
+                    <Text fontWeight="bold">Yearly Membership</Text>
+                  </Radio>
+                </CardHeader>
+                <CardBody>
                   <Text>Access to all facilities and events for a year.</Text>
-                </Box>
-              </Radio>
-              <Radio value="monthly">
-                <Box>
-                  <Text fontWeight="bold">Monthly Membership</Text>
+                </CardBody>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <Radio value="monthly">
+                    <Text fontWeight="bold">Monthly Membership</Text>
+                  </Radio>
+                </CardHeader>
+                <CardBody>
                   <Text>Access to all facilities and events for a month.</Text>
-                </Box>
-              </Radio>
-              <Radio value="support">
-                <Box>
-                  <Text fontWeight="bold">Support Membership</Text>
+                </CardBody>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <Radio value="support">
+                    <Text fontWeight="bold">Support Membership</Text>
+                  </Radio>
+                </CardHeader>
+                <CardBody>
                   <Text>Support us and get occasional access to events.</Text>
-                </Box>
-              </Radio>
-            </Stack>
+                </CardBody>
+              </Card>
+            </SimpleGrid>
           </RadioGroup>
         </Box>
         <Box width="100%" p={5} shadow="md" borderWidth="1px" borderRadius="md">
