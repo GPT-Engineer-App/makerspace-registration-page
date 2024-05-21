@@ -1,7 +1,8 @@
 import { Container, VStack, Heading, Text, Box, Button, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter, List, ListItem, ListIcon, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useDisclosure } from "@chakra-ui/react";
+import { Fireworks } from "fireworks-js/dist/react";
 
 const Index = () => {
   const [membershipType, setMembershipType] = useState("yearly");
@@ -12,6 +13,7 @@ const Index = () => {
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isGameWon, setIsGameWon] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,14 +63,47 @@ const Index = () => {
   const [board, setBoard] = useState(Array(9).fill(""));
   const [isXNext, setIsXNext] = useState(true);
 
+  const checkWinner = (board) => {
+    const winningCombinations = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let combination of winningCombinations) {
+      const [a, b, c] = combination;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const handleCellClick = (index) => {
-    if (board[index] !== "") return;
+    if (board[index] !== "" || isGameWon) return;
 
     const newBoard = board.slice();
     newBoard[index] = isXNext ? "X" : "O";
     setBoard(newBoard);
     setIsXNext(!isXNext);
+
+    if (checkWinner(newBoard)) {
+      setIsGameWon(true);
+    }
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setBoard(Array(9).fill(""));
+      setIsXNext(true);
+      setIsGameWon(false);
+    }
+  }, [isOpen]);
 
   return (
     <Container centerContent maxW="container.lg" py={10}>
@@ -165,6 +200,19 @@ const Index = () => {
                 ))}
               </SimpleGrid>
             </Box>
+            {isGameWon && (
+              <Fireworks
+                options={{ speed: 3 }}
+                style={{
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  position: "fixed",
+                  zIndex: 9999,
+                }}
+              />
+            )}
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
