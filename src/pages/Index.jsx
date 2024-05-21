@@ -33,46 +33,40 @@ const Index = () => {
           Choose your membership type and fill in your details to join us!
         </Text>
         <Box width="100%" p={5} shadow="md" borderWidth="1px" borderRadius="md">
-          <Heading as="h2" size="lg" mb={4}>
+          <Heading as="h2" size="lg" mb={4} textAlign="center">
             Membership Options
           </Heading>
           <RadioGroup onChange={setMembershipType} value={membershipType}>
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
-              <Card>
-                <CardHeader>
-                  <Radio value="yearly">
-                    <Text fontWeight="bold">Yearly Membership</Text>
-                  </Radio>
-                </CardHeader>
-                <CardBody>
-                  <Text>Access to all facilities and events for a year.</Text>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <Radio value="monthly">
-                    <Text fontWeight="bold">Monthly Membership</Text>
-                  </Radio>
-                </CardHeader>
-                <CardBody>
-                  <Text>Access to all facilities and events for a month.</Text>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <Radio value="support">
-                    <Text fontWeight="bold">Support Membership</Text>
-                  </Radio>
-                </CardHeader>
-                <CardBody>
-                  <Text>Support us and get occasional access to events.</Text>
-                </CardBody>
-              </Card>
+              {["yearly", "monthly", "support"].map((type) => (
+                <Card
+                  key={type}
+                  onClick={() => setMembershipType(type)}
+                  borderWidth={membershipType === type ? "2px" : "1px"}
+                  borderColor={membershipType === type ? "blue.500" : "gray.200"}
+                  cursor="pointer"
+                >
+                  <CardHeader>
+                    <Radio value={type}>
+                      <Text fontWeight="bold">
+                        {type.charAt(0).toUpperCase() + type.slice(1)} Membership
+                      </Text>
+                    </Radio>
+                  </CardHeader>
+                  <CardBody>
+                    <Text>
+                      {type === "yearly" && "Access to all facilities and events for a year."}
+                      {type === "monthly" && "Access to all facilities and events for a month."}
+                      {type === "support" && "Support us and get occasional access to events."}
+                    </Text>
+                  </CardBody>
+                </Card>
+              ))}
             </SimpleGrid>
           </RadioGroup>
         </Box>
         <Box width="100%" p={5} shadow="md" borderWidth="1px" borderRadius="md">
-          <Heading as="h2" size="lg" mb={4}>
+          <Heading as="h2" size="lg" mb={4} textAlign="center">
             Your Information
           </Heading>
           <VStack spacing={4} width="100%">
