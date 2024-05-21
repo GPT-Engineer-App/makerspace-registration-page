@@ -23,6 +23,8 @@ const Index = () => {
   };
 
   const handleSubmit = () => {
+    setBoard(Array(9).fill(""));
+    setIsXNext(true);
     onOpen();
   };
 
@@ -95,7 +97,7 @@ const Index = () => {
     const winner = checkWinner(newBoard);
     if (winner) {
       setShowFireworks(true);
-      setTimeout(() => setShowFireworks(false), 5000); // Fireworks for 5 seconds
+      setTimeout(() => setShowFireworks(false), 10000); // Fireworks for 10 seconds
     }
   };
 
@@ -111,7 +113,7 @@ const Index = () => {
         const particle = {
           x,
           y,
-          size: Math.random() * 5 + 1,
+          size: Math.random() * 10 + 5, // Increase particle size
           speedX: Math.random() * 3 - 1.5,
           speedY: Math.random() * 3 - 1.5,
           color: `hsl(${Math.random() * 360}, 100%, 50%)`,
@@ -174,7 +176,7 @@ const Index = () => {
       };
     }, []);
 
-    return <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} style={{ position: "fixed", top: 0, left: 0, pointerEvents: "none" }} />;
+    return <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} style={{ position: "fixed", top: 0, left: 0, pointerEvents: "none", zIndex: 1000 }} />;
   };
 
   return (
