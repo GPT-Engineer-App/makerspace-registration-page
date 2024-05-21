@@ -1,5 +1,6 @@
-import { Container, VStack, Heading, Text, Box, Button, RadioGroup, Radio, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Box, Button, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter, List, ListItem, ListIcon } from "@chakra-ui/react";
 import { useState } from "react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const Index = () => {
   const [membershipType, setMembershipType] = useState("yearly");
@@ -23,6 +24,39 @@ const Index = () => {
     console.log("Membership Type:", membershipType);
   };
 
+  const membershipOptions = [
+    {
+      type: "yearly",
+      title: "Yearly Membership",
+      description: "Access to all facilities and events for a year.",
+      features: [
+        { text: "Access to all facilities", available: true },
+        { text: "Free entry to events", available: true },
+        { text: "Priority support", available: true },
+      ],
+    },
+    {
+      type: "monthly",
+      title: "Monthly Membership",
+      description: "Access to all facilities and events for a month.",
+      features: [
+        { text: "Access to all facilities", available: true },
+        { text: "Free entry to events", available: true },
+        { text: "Priority support", available: false },
+      ],
+    },
+    {
+      type: "support",
+      title: "Support Membership",
+      description: "Support us and get occasional access to events.",
+      features: [
+        { text: "Access to all facilities", available: false },
+        { text: "Free entry to events", available: true },
+        { text: "Priority support", available: false },
+      ],
+    },
+  ];
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={8} width="100%">
@@ -36,34 +70,34 @@ const Index = () => {
           <Heading as="h2" size="lg" mb={4} textAlign="center">
             Membership Options
           </Heading>
-          <RadioGroup onChange={setMembershipType} value={membershipType}>
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
-              {["yearly", "monthly", "support"].map((type) => (
-                <Card
-                  key={type}
-                  onClick={() => setMembershipType(type)}
-                  borderWidth={membershipType === type ? "2px" : "1px"}
-                  borderColor={membershipType === type ? "blue.500" : "gray.200"}
-                  cursor="pointer"
-                >
-                  <CardHeader>
-                    <Radio value={type}>
-                      <Text fontWeight="bold">
-                        {type.charAt(0).toUpperCase() + type.slice(1)} Membership
-                      </Text>
-                    </Radio>
-                  </CardHeader>
-                  <CardBody>
-                    <Text>
-                      {type === "yearly" && "Access to all facilities and events for a year."}
-                      {type === "monthly" && "Access to all facilities and events for a month."}
-                      {type === "support" && "Support us and get occasional access to events."}
-                    </Text>
-                  </CardBody>
-                </Card>
-              ))}
-            </SimpleGrid>
-          </RadioGroup>
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
+            {membershipOptions.map((option) => (
+              <Card
+                key={option.type}
+                onClick={() => setMembershipType(option.type)}
+                borderWidth={membershipType === option.type ? "2px" : "1px"}
+                borderColor={membershipType === option.type ? "blue.500" : "gray.200"}
+                cursor="pointer"
+              >
+                <CardHeader>
+                  <Text fontSize="xl" fontWeight="bold">
+                    {option.title}
+                  </Text>
+                </CardHeader>
+                <CardBody>
+                  <Text mb={4}>{option.description}</Text>
+                  <List spacing={2}>
+                    {option.features.map((feature, index) => (
+                      <ListItem key={index}>
+                        <ListIcon as={feature.available ? FaCheckCircle : FaTimesCircle} color={feature.available ? "green.500" : "red.500"} />
+                        {feature.text}
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardBody>
+              </Card>
+            ))}
+          </SimpleGrid>
         </Box>
         <Box width="100%" p={5} shadow="md" borderWidth="1px" borderRadius="md">
           <Heading as="h2" size="lg" mb={4} textAlign="center">
