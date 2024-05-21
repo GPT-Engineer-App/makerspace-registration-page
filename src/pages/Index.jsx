@@ -1,6 +1,7 @@
-import { Container, VStack, Heading, Text, Box, Button, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter, List, ListItem, ListIcon } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Box, Button, Stack, Input, FormControl, FormLabel, SimpleGrid, Card, CardHeader, CardBody, CardFooter, List, ListItem, ListIcon, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useDisclosure } from "@chakra-ui/react";
 
 const Index = () => {
   const [membershipType, setMembershipType] = useState("yearly");
@@ -9,6 +10,8 @@ const Index = () => {
     email: "",
     address: "",
   });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,9 +22,7 @@ const Index = () => {
   };
 
   const handleSubmit = () => {
-    // Handle form submission and payment processing
-    console.log("User Info:", userInfo);
-    console.log("Membership Type:", membershipType);
+    onOpen();
   };
 
   const membershipOptions = [
@@ -56,6 +57,18 @@ const Index = () => {
       ],
     },
   ];
+
+  const [board, setBoard] = useState(Array(9).fill(""));
+  const [isXNext, setIsXNext] = useState(true);
+
+  const handleCellClick = (index) => {
+    if (board[index] !== "") return;
+
+    const newBoard = board.slice();
+    newBoard[index] = isXNext ? "X" : "O";
+    setBoard(newBoard);
+    setIsXNext(!isXNext);
+  };
 
   return (
     <Container centerContent maxW="container.lg" py={10}>
@@ -137,6 +150,29 @@ const Index = () => {
           Proceed to Payment
         </Button>
       </VStack>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Tic Tac Toe</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box>
+              <SimpleGrid columns={3} spacing={2}>
+                {Array(9).fill("").map((_, index) => (
+                  <Box key={index} borderWidth="1px" borderRadius="md" height="100px" display="flex" alignItems="center" justifyContent="center" fontSize="2xl" onClick={() => handleCellClick(index)}>
+                    {board[index]}
+                  </Box>
+                ))}
+              </SimpleGrid>
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };
