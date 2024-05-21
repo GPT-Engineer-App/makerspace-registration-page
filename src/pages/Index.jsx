@@ -24,8 +24,6 @@ const Index = () => {
 
   const handleSubmit = () => {
     onOpen();
-    setShowFireworks(true);
-    setTimeout(() => setShowFireworks(false), 5000); // Fireworks for 5 seconds
   };
 
   const membershipOptions = [
@@ -64,13 +62,41 @@ const Index = () => {
   const [board, setBoard] = useState(Array(9).fill(""));
   const [isXNext, setIsXNext] = useState(true);
 
+  const checkWinner = (board) => {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let line of lines) {
+      const [a, b, c] = line;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a];
+      }
+    }
+
+    return null;
+  };
+
   const handleCellClick = (index) => {
-    if (board[index] !== "") return;
+    if (board[index] !== "" || checkWinner(board)) return;
 
     const newBoard = board.slice();
     newBoard[index] = isXNext ? "X" : "O";
     setBoard(newBoard);
     setIsXNext(!isXNext);
+
+    const winner = checkWinner(newBoard);
+    if (winner) {
+      setShowFireworks(true);
+      setTimeout(() => setShowFireworks(false), 5000); // Fireworks for 5 seconds
+    }
   };
 
   const FireworksCanvas = () => {
