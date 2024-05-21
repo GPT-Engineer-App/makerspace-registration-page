@@ -58,7 +58,7 @@ const Index = () => {
   ];
 
   return (
-    <Container centerContent maxW="container.md" py={10}>
+    <Container centerContent maxW="container.lg" py={10}>
       <VStack spacing={8} width="100%">
         <Heading as="h1" size="2xl" textAlign="center">
           Join Stockholm Makerspace
@@ -70,7 +70,7 @@ const Index = () => {
           <Heading as="h2" size="lg" mb={4} textAlign="center">
             Membership Options
           </Heading>
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5}>
             {membershipOptions.map((option) => (
               <Card
                 key={option.type}
@@ -80,7 +80,7 @@ const Index = () => {
                 cursor="pointer"
               >
                 <CardHeader>
-                  <Text fontSize="xl" fontWeight="bold">
+                  <Text fontSize="2xl" fontWeight="bold">
                     {option.title}
                   </Text>
                 </CardHeader>
